@@ -4,7 +4,7 @@ Purpose: Vistualize all nodes and links in the network
 
 
 Frontend: react
-Backend: https://demo.nautobot.com/
+Backend: https://demo.nautobot.com/ or your owned instance
 
 
 

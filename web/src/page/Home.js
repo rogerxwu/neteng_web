@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import useWindowDimensions from "../component/Hooks/useWindowDimension";
-import NetworkTopologyGraph from "../component/NetworkTopology/Graph";
 
 export default function PageHome() {
     const { height, width } = useWindowDimensions()
@@ -40,7 +39,6 @@ export default function PageHome() {
     }, []);
 
     return <>
-        <NetworkTopologyGraph height={height} width={width} />
         <div>
             <h2>Sites Information</h2>
             <ul>

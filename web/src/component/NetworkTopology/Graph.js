@@ -3,14 +3,6 @@ import { Graph } from "react-d3-graph";
 
 
 export default function NetworkTopologyGraph(params) {
-    // graph payload (with minimalist structure)
-    const data = {
-        nodes: [{ id: "Harry" }, { id: "Sally" }, { id: "Alice" }],
-        links: [
-            { source: "Harry", target: "Sally" },
-            { source: "Harry", target: "Alice" },
-        ],
-    };
 
     // the graph configuration, just override the ones you need
     const myConfig = {
@@ -47,8 +39,8 @@ export default function NetworkTopologyGraph(params) {
     };
 
     return <Graph
-        id="graph-id" // id is mandatory
-        data={data}
+        id="graph-1" // id is mandatory
+        data={params.data}
         config={myConfig}
         onClickNode={onClickNode}
         onClickLink={onClickLink}

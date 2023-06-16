@@ -1,5 +1,8 @@
 import React from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider, useQuery, gql } from '@apollo/client';
+import useWindowDimensions from '../component/Hooks/useWindowDimension';
+import NetworkTopologyGraph from '../component/NetworkTopology/Graph';
+
 
 // Configure the Apollo Client
 const client = new ApolloClient({
@@ -13,35 +16,71 @@ const client = new ApolloClient({
 });
 
 // GraphQL query to fetch site information
-const GET_SITES = gql`
+const query_string = gql`
   query {
-    sites {
-      id
-      name
+      	devices {
+          name
+          id
+        } 
+      	cables{
+          termination_a_id
+          termination_b_id
+          status{
+            name
+          }
+        }
+        interfaces{
+          id
+        	device {
+        	  id
+        	}
+      	}
     }
-  }
 `;
 
+
+
 const SitesInfo = () => {
-    const { loading, error, data } = useQuery(GET_SITES);
+    const { height, width } = useWindowDimensions()
+    const { loading, error, data } = useQuery(query_string);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
+    const graph_data = {
+        nodes: [],
+        links: [],
+    };
+    //console.log(data)
+    for (let device in data.devices) {
+        graph_data.nodes.push({
+            id: data.devices[device].id,
+            name: data.devices[device].name,
+        })
+    }
+    function interface2device (termination_id) {
+        // data.interfaces
+        for (let i in data.interfaces) {
+            if (termination_id === data.interfaces[i].id){
+                return data.interfaces[i].device.id
+            } 
+        }
+    }
+    for (let cable in data.cables) {
+        // if termination id is in interfaces, return its hostname
+        let termination_a_device_id = interface2device(data.cables[cable].termination_a_id)
+        let termination_b_device_id = interface2device(data.cables[cable].termination_b_id)
+        if (termination_a_device_id && termination_b_device_id) {
+            graph_data.links.push({
+                source: termination_a_device_id,
+                target: termination_b_device_id,
+            })
+        }
+        
+    }
 
-    const { sites } = data;
-
+    console.log(graph_data)
     return (
-        <div>
-            <h2>Sites Information</h2>
-            <ul>
-                {sites.map(site => (
-                    <li key={site.id}>
-                        <strong>Name:</strong> {site.name}
-                        {/* Render additional site information */}
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <NetworkTopologyGraph height={height} width={width} data={graph_data}/>
     );
 };
 
