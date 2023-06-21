@@ -1,57 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import useWindowDimensions from "../component/Hooks/useWindowDimension";
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+
 
 export default function PageHome() {
-    const { height, width } = useWindowDimensions()
 
-    const [sites, setSites] = useState([]);
 
-    useEffect(() => {
-        const fetchSites = async () => {
-            try {
-                const response = await fetch('https://demo.nautobot.com/api/graphql/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Token aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        query: `
-                            query {
-                                sites {
-                                    id
-                                    name
-                                }
-                            }
-                            `
-                    }),
-                });
-
-                const result = await response.json();
-                setSites(result.data.sites);
-            } catch (error) {
-                console.error('Error fetching sites:', error);
-            }
-        };
-
-        fetchSites();
-    }, []);
-
-    return <>
-        <div>
-            <h2>Sites Information</h2>
-            <ul>
-                {sites.map(site => (
-                    <li key={site.id}>
-                        <strong>Name:</strong> {site.name}
-                        {/* Render additional site information */}
-                    </li>
-                ))}
-            </ul>
+    return (
+        <div style={{display:'grid', }}>
+            <h1>Home Page</h1>
+            <Link to="/topology/site">Go to Site Page</Link>
+            <Link to="/topology/backbone">Go to BackBone Page</Link>
         </div>
-    </>
+    );
+};
 
-}
+
+
+
+
+
+
+
 
 

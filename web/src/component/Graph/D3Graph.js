@@ -2,7 +2,7 @@ import React from "react";
 import { Graph } from "react-d3-graph";
 
 
-export default function NetworkTopologyGraph(params) {
+export default function D3Graph(params) {
 
     // the graph configuration, just override the ones you need
     const myConfig = {
@@ -10,6 +10,7 @@ export default function NetworkTopologyGraph(params) {
         width: params.width,
         nodeHighlightBehavior: true,
         linkHighlightBehavior: true,
+        //disableLinkForce: true,
         node: {
             color: "lightgreen",
             size: 120,
@@ -28,6 +29,9 @@ export default function NetworkTopologyGraph(params) {
             semanticStrokeWidth: true,
 
         },
+        d3: {
+            gravity: -1500,
+        }
     };
 
     const onClickNode = function (nodeId) {
